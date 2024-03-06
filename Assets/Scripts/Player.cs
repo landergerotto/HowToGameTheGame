@@ -1,54 +1,73 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float BaseSpeed;
-    public Rigidbody2D Collision; 
+    public float baseSpeed;
+    public Rigidbody2D body;
     public bool isMoving;
 
-    private Vector2 input;
+    private Vector2 axisInput;
     private Animator animator;
+
+    private List<KeyCode> allowesKeys;
 
     public void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Start is called before the first frame update
     public void Start()
     {
-        
     }
 
-    // Update is called once per frame
     public void Update()
     {
-        this.input.x = Input.GetAxisRaw("Horizontal");
-        this.input.y = Input.GetAxisRaw("Vertical");
-        this.input = this.input.normalized;
+        axisInput.x = Input.GetAxisRaw("Horizontal");
+        axisInput.y = Input.GetAxisRaw("Vertical");
+        axisInput = axisInput.normalized;
 
-        this.animator.SetFloat("MoveX", this.input.x);
-        this.animator.SetFloat("MoveY", this.input.y);
+        animator.SetFloat("MoveX", axisInput.x);
+        animator.SetFloat("MoveY", axisInput.y);
 
-        if (this.input.sqrMagnitude != 0)
-            this.isMoving = true;
-        else
-            this.isMoving = false;
+        isMoving = (axisInput.sqrMagnitude != 0);
 
-        this.animator.SetBool("isMoving", this.isMoving);
-        
+        animator.SetBool("isMoving", isMoving);
+
+        UpdateCommands();
     }
 
 
     void FixedUpdate()
     {
-        this.Collision.MovePosition(
-            this.Collision.position 
-            + this.input * this.BaseSpeed * Time.deltaTime
-        );
+        body.MovePosition(body.position + baseSpeed * Time.deltaTime * axisInput);
+    }
+
+    private void UpdateCommands()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && allowesKeys.Contains(KeyCode.Escape))
+            EscapeCommand();
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && allowesKeys.Contains(KeyCode.Mouse0))
+            ClickCommand();
+
+        if (Input.GetKeyDown(KeyCode.Space) && allowesKeys.Contains(KeyCode.Space))
+            SpaceCommand();
+    }
+
+    private void EscapeCommand()
+    {
+        Debug.Log("Escape allowed and used!");
+    }
+
+    private void ClickCommand()
+    {
+        Debug.Log("Mouse click allowed and used!");
+    }
+
+    private void SpaceCommand()
+    {
+        Debug.Log("Space allowed and used!");
     }
 
     /* 1 to 1 movement */
@@ -71,7 +90,7 @@ public class Player : MonoBehaviour
 
     //         StartCoroutine(Move(targetPos));
     //     }
-        
+
     // }
     // public IEnumerator Move(Vector3 targetPos)
     // {
