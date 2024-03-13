@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public float BaseSpeed;
-    public Rigidbody2D Collision; 
+    public Rigidbody2D Collision;
     public bool isMoving;
 
     private Vector2 input;
@@ -17,17 +14,30 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Start is called before the first frame update
     public void Start()
     {
-        
+        InputValid.EnableKey(KeyCode.W);
+        InputValid.EnableKey(KeyCode.A);
+        InputValid.EnableKey(KeyCode.S);
+        InputValid.EnableKey(KeyCode.D);
     }
 
-    // Update is called once per frame
     public void Update()
     {
-        this.input.x = Input.GetAxisRaw("Horizontal");
-        this.input.y = Input.GetAxisRaw("Vertical");
+        //this.input.x = Input.GetAxisRaw("Horizontal");
+        input.x = 0;
+        if (InputValid.GetKey(KeyCode.A))
+            input.x--;
+        if (InputValid.GetKey(KeyCode.D))
+            input.x++;
+
+        //this.input.y = Input.GetAxisRaw("Vertical");
+        input.y = 0;
+        if (InputValid.GetKey(KeyCode.W))
+            input.y++;
+        if (InputValid.GetKey(KeyCode.S))
+            input.y--;
+
         this.input = this.input.normalized;
 
         this.animator.SetFloat("MoveX", this.input.x);
@@ -39,14 +49,14 @@ public class Player : MonoBehaviour
             this.isMoving = false;
 
         this.animator.SetBool("isMoving", this.isMoving);
-        
+
     }
 
 
     void FixedUpdate()
     {
         this.Collision.MovePosition(
-            this.Collision.position 
+            this.Collision.position
             + this.input * this.BaseSpeed * Time.deltaTime
         );
     }
@@ -71,7 +81,7 @@ public class Player : MonoBehaviour
 
     //         StartCoroutine(Move(targetPos));
     //     }
-        
+
     // }
     // public IEnumerator Move(Vector3 targetPos)
     // {
