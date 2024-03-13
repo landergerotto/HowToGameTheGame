@@ -13,8 +13,7 @@ public static class InputValid
 
     public static void DisableKey(KeyCode key)
     {
-        if (!enabledKeys.Contains(key))
-            enabledKeys.Add(key);
+        enabledKeys.Remove(key);
     }
 
     public static bool KeyIsEnabled(KeyCode key)
