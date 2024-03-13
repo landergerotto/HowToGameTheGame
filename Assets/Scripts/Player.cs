@@ -38,17 +38,18 @@ public class Player : MonoBehaviour
         if (InputValid.GetKey(KeyCode.S))
             input.y--;
 
-        this.input = this.input.normalized;
+        input = input.normalized;
 
-        this.animator.SetFloat("MoveX", this.input.x);
-        this.animator.SetFloat("MoveY", this.input.y);
+        animator.SetFloat("MoveX", input.x);
+        animator.SetFloat("MoveY", input.y);
 
-        if (this.input.sqrMagnitude != 0)
-            this.isMoving = true;
+        /*if (input.sqrMagnitude != 0)
+            isMoving = true;
         else
-            this.isMoving = false;
+            isMoving = false;*/
+        isMoving = input.sqrMagnitude != 0;
 
-        this.animator.SetBool("isMoving", this.isMoving);
+        animator.SetBool("isMoving", isMoving);
 
     }
 
